@@ -1,0 +1,23 @@
+build:
+  box: google/golang
+  steps:
+    - script:
+        name: go get
+        code: |
+          go get "golang.org/x/crypto/ssh"
+    - script:
+        name: go build
+        code: CGO_ENABLED=0 go build -a -ldflags '-s' -installsuffix cgo -o ecslogs .
+    - script:
+        name: copy binary
+        code: cp ecslogs "$WERCKER_OUTPUT_DIR"
+deploy:
+    box: google/golang
+    steps:
+    - internal/docker-scratch-push:
+        username: $DOCKER_HUB_USERNAME
+        password: $DOCKER_HUB_PASSWORD
+        cmd: ./ecslogs
+        tag: latest
+        repository: djannot/ecslogs
+        registry: https://hub.docker.com
