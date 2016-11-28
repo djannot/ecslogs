@@ -6,7 +6,7 @@ ECSLOGS
 OVERVIEW
 --------------
 
-ECSLOGS is a tool developped in Golang to gather logs files from an ECS appliance.
+ECSLOGS is a tool developped in Golang to gather logs files from an ECS VDC.
 
 BUILD
 --------------
@@ -19,8 +19,15 @@ RUN
 --------------
 
 ```
-docker run -it djannot/ecslogs ./ecslogs --help
+echo <password> | docker run -i djannot/ecslogs ./ecslogs <user> <host:port> <pattern> <input log> <# days> <pipe|file> <output file>
 ```
+
+For example, to get the access logs for the last 3 days:
+```
+ echo "ChangeMe" | docker run -i -v `pwd`:/tmp djannot/ecslogs ./ecslogs admin 10.64.231.196:22 RequestLog.java dataheadsvc.log 3 file /tmp/access.log
+```
+
+It will automatically get the logs from all the ECS nodes of the VDC.
 
 LICENSING
 --------------
